@@ -5,8 +5,21 @@ import 'package:questin/providers/quest_provider.dart';
 import 'package:questin/screens/profile_screen.dart';
 import 'package:questin/widgets/game_card.dart';
 
-class StudentHomePage extends StatelessWidget {
+class StudentHomePage extends StatefulWidget {
   StudentHomePage({super.key});
+
+  @override
+  State<StudentHomePage> createState() => _StudentHomePageState();
+}
+
+class _StudentHomePageState extends State<StudentHomePage> {
+@override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      context.read<QuestProvider>().loadquest(); 
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
