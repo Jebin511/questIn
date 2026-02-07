@@ -7,6 +7,7 @@ class CompanyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return FloatingActionButton(
       child: Text("➕ New Quest"),
       onPressed: () {

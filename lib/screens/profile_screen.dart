@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:questin/providers/profile_provider.dart';
+import 'package:questin/screens/login_page.dart';
+import 'package:questin/services/auth_service.dart';
+import 'package:questin/services/quest_service.dart';
 import 'package:questin/widgets/game_card.dart';
 import 'package:questin/widgets/pixel_scaffold.dart';
 
@@ -12,7 +15,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -21,14 +23,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  final auth = AuthService();
   @override
   Widget build(BuildContext context) {
     final profileProvider = context.watch<ProfileProvider>();
 
     if (profileProvider.isLoading || profileProvider.map == null) {
-      return  Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final profile = profileProvider.map!;
@@ -43,20 +44,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Center(
                 child: GestureDetector(
-                onTap: () {
-                  context.read<ProfileProvider>().updateAvatar();
-                },
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.white,
-                  backgroundImage: profile['avatar_url'] != null
-                      ? NetworkImage(profile['avatar_url'])
-                      : null,
-                  child: profile['avatar_url'] == null
-                      ? const Icon(Icons.add_a_photo)
-                      : null,
+                  onTap: () {
+                    context.read<ProfileProvider>().updateAvatar();
+                  },
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.white,
+                    backgroundImage: profile['avatar_url'] != null
+                        ? NetworkImage(profile['avatar_url'])
+                        : null,
+                    child: profile['avatar_url'] == null
+                        ? const Icon(Icons.add_a_photo)
+                        : null,
+                  ),
                 ),
-              ),
               ),
               const SizedBox(height: 20),
 
@@ -77,7 +78,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: Colors.white,
                 ),
               ),
-             
+              Spacer(),
+              IconButton(
+                onPressed: () async {
+                  auth.logout();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                icon: Icon(Icons.logout),
+              ),
             ],
           ),
         ),

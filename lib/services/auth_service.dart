@@ -7,25 +7,22 @@ class AuthService {
   final supabase = Supabase.instance.client;
 
   Future<void> Signup({
-  
-    required String email, 
+    required String email,
     required String password,
     required String bio,
     required String name,
-    
   }) async {
     final data = await supabase.auth.signUp(email: email, password: password);
     final UserId = data.user!;
     await supabase.from('profiles').insert({
       'id': UserId.id,
       'name': name,
-      'email':email,
+      'email': email,
       'role': 'student',
       'bio': bio,
       'avatar_url': 'nil',
       'created_at': DateTime.now().toString(),
     });
-    
   }
 
   Future<void> SignIn({
@@ -34,6 +31,9 @@ class AuthService {
     context,
   }) async {
     await supabase.auth.signInWithPassword(email: email, password: password);
-    
+  }
+
+  Future<void> logout() async {
+    await supabase.auth.signOut();
   }
 }

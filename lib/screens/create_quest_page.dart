@@ -42,6 +42,19 @@ class _CreateQuestPageState extends State<CreateQuestPage> {
                       title: titlecontroller.text,
                       description: descController.text,
                     );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text(
+                          'Quest posted Successfully 🎉',
+                          style: TextStyle(
+                            fontFamily: 'Pixel',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                    Navigator.of(context).pop();
                   } catch (error) {
                     print(error);
                   }

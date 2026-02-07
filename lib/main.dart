@@ -7,6 +7,7 @@ import 'package:questin/routes/home_router.dart';
 import 'package:questin/screens/company_home_page.dart';
 import 'package:questin/screens/login_page.dart';
 import 'package:questin/screens/student_home_page.dart';
+import 'package:questin/services/auth_service.dart';
 import 'package:questin/services/quest_service.dart';
 import 'package:questin/theme/app_theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -32,6 +33,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     QuestProvider().loadquest();
+    AuthService().logout();
     super.initState();
   }
 

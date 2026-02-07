@@ -13,21 +13,23 @@ class StudentHomePage extends StatefulWidget {
 }
 
 class _StudentHomePageState extends State<StudentHomePage> {
-@override
+  @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      context.read<QuestProvider>().loadquest(); 
+      context.read<QuestProvider>().loadquest();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-final questProvider = context.watch<QuestProvider>();
-final quests = questProvider.quests;
+    final questProvider = context.watch<QuestProvider>();
+    final quests = questProvider.quests;
     return Stack(
       children: [
-        Positioned.fill(child: Image.asset('assets/black.png', fit: BoxFit.cover)),
+        Positioned.fill(
+          child: Image.asset('assets/black.png', fit: BoxFit.cover),
+        ),
         Scaffold(
           backgroundColor: Colors.transparent,
           extendBodyBehindAppBar: true,
@@ -100,12 +102,60 @@ final quests = questProvider.quests;
                             itemCount: quests.length,
                             itemBuilder: (context, index) {
                               final quest = quests[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: Text(
-                                  quest['title'],
-                                  style: TextStyle(fontFamily: 'Pixel'),
-                                ),
+                              final questid = quest['id'];
+                              final status = quest['status'];
+                              // final status = quest['status'];
+                              return Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        quest['title'],
+                                        style: const TextStyle(
+                                          fontFamily: 'Pixel',
+                                        ),
+                                      ),
+                                      const Spacer(),
+
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: status == 'active'
+                                              ? Colors.green
+                                              : Colors.grey,
+                                        ),
+                                        onPressed: () async {
+                                          await context
+                                              .read<QuestProvider>()
+                                              .toggleStatus(
+                                                questId: quest['id'],
+                                                currentStatus: status,
+                                              );
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              duration: Duration(seconds: 1),
+                                              content: Text(status=='active'?
+                                              "Deactivated":'Activated',style: TextStyle(
+                                                fontFamily: 'Pixel',
+                                                color: status=='active'?Colors.red:Colors.green
+                                              ),)
+                                              ),
+                                          );
+                                        },
+                                        child: Text(
+                                          status == 'active'
+                                              ? 'Active'
+                                              : 'Set Active',
+                                          style: const TextStyle(
+                                            fontFamily: 'Pixel',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
+                                ],
                               );
                             },
                           ),
